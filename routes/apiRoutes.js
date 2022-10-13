@@ -37,11 +37,14 @@ router.post('/notes', (req, res) => {
 
 
   router.delete('/notes/:id', (req, res) => {
-    note
-      .removeNote(req.params.id)
-      .then(() => res.json({ ok: true }))
-      .catch((err) => res.status(500).json(err));
-  });
+    readFromFile('./db/db.json').then((data) => {
+        let curData = JSON.parse(data);
+
+        let newData = curData.filter((note) => note.id !== req.params.id);
+        console.log(newData);
+        writeToFile('./db/db.json', newData);
+    });
+});
   
   
 
